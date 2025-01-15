@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Countdowns</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            color: #333;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .countdown {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .event-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .time {
+            font-size: 1.5em;
+            color: #555;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Countdowns</h1>
+    <div id="countdowns"></div>
+    <footer>&copy; 2025 Event Countdown</footer>
+
+    <script>
+        const events = [
+            { name: "New Year's Day", date: "2025-01-01T00:00:00" },
+            { name: "Graduation Day", date: "2025-05-25T00:00:00" },
+            { name: "Costa Rica Trip", date: "2025-07-01T00:00:00" }
+        ];
+
+        function updateCountdowns() {
+            const now = new Date().getTime();
+            const container = document.getElementById('countdowns');
+            container.innerHTML = '';
+
+            events.forEach(event => {
+                const eventDate = new Date(event.date).getTime();
+                const timeLeft = eventDate - now;
+
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                const countdown = document.createElement('div');
+                countdown.className = 'countdown';
+
+                countdown.innerHTML = `
+                    <div class="event-name">${event.name}</div>
+                    <div class="time">${days}d ${hours}h ${minutes}m ${seconds}s</div>
+                `;
+
+                container.appendChild(countdown);
+            });
+        }
+
+        setInterval(updateCountdowns, 1000);
+    </script>
+</body>
+</html>
