@@ -40,7 +40,7 @@ body {
 
     .event:hover  {
       transform: rotate3d(0.5, 1, 0, 30deg);
-
+      background-position: -100px 100px, -100px 100px;
     }
 
     .event-title {
