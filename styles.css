@@ -38,6 +38,11 @@ body {
       transition: transform 0.2s ease, font-size 0.2s ease;
     }
 
+    .event:hover  {
+      transform: rotate3d(0.5, 1, 0, 30deg);
+
+    }
+
     .event-title {
       margin-bottom: 10px;
     }
@@ -45,3 +50,4 @@ body {
     .event-timer {
       font-weight: bold;
     }
+
