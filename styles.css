@@ -2,9 +2,9 @@
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #1e1e2e, #121214);
-  color: #ffffff;
-  font-family: 'Roboto', sans-serif;
+  background: radial-gradient(circle, #0d1117, #090c10);
+  color: #e6edf3;
+  font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,23 +24,25 @@ body {
 
 /* Title styling */
 .title {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
   margin-bottom: 30px;
-  letter-spacing: 1.5px;
-  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  color: #f3f3f3;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #4c79ff, #67e8f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 4px 8px rgba(76, 121, 255, 0.3);
 }
 
 /* Event card styling */
 .event {
-  background: #222233;
-  border: 1px solid #3b3b4f;
-  border-radius: 12px;
+  background: linear-gradient(145deg, #13161d, #171b22);
+  border: 1px solid #21262d;
+  border-radius: 15px;
   margin-bottom: 20px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 15px rgba(30, 144, 255, 0.2);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(103, 232, 249, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -49,42 +51,62 @@ body {
 }
 
 .event:hover {
-  transform: scale(1.03);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6), 0 0 20px rgba(30, 144, 255, 0.4);
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6), 0 4px 15px rgba(103, 232, 249, 0.5);
 }
 
 /* Event title styling */
 .event-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #87cefa;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #4c79ff;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
+  text-shadow: 0px 3px 6px rgba(76, 121, 255, 0.5);
 }
 
 /* Event timer styling */
 .event-timer {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 500;
-  color: #d1d1d1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  color: #a6b1c2;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-/* Glow effect for timer */
+/* Highlight effect for timer numbers */
 .event-timer span {
-  color: #87ceeb;
+  color: #67e8f9;
   font-weight: bold;
+  text-shadow: 0px 3px 6px rgba(103, 232, 249, 0.5);
 }
 
 /* Media Queries for smaller screens */
 @media (max-width: 768px) {
   .title {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 
   .event {
     padding: 15px;
+  }
+
+  .event-title {
+    font-size: 1.4rem;
+  }
+
+  .event-timer {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .event {
+    padding: 10px;
   }
 
   .event-title {
@@ -93,23 +115,5 @@ body {
 
   .event-timer {
     font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .title {
-    font-size: 1.5rem;
-  }
-
-  .event {
-    padding: 10px;
-  }
-
-  .event-title {
-    font-size: 1rem;
-  }
-
-  .event-timer {
-    font-size: 0.9rem;
   }
 }
