@@ -36,21 +36,9 @@ body {
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
       word-wrap: break-word;
       text-align: center;
-       transform-style: preserve-3d;
-         background: linear-gradient(135deg,#0000 18.75%,#f3f3f3 0 31.25%,#0000 0),
-      repeating-linear-gradient(45deg,#f3f3f3 -6.25% 6.25%,#ffffff 0 18.75%);
-        background-size: 60px 60px;
-        background-position: 0 0, 0 0;
-        background-color: #f0f0f0;
-        width: 100%;
-        box-shadow: rgba(142, 142, 142, 0.3) 0px 30px 30px -10px;
-        transition: all 0.5s ease-in-out;
     }
 
-    .event:hover  {
-      transform: rotate3d(0.5, 1, 0, 30deg);
-      background-position: -100px 100px, -100px 100px;
-    }
+
 
     .event-title {
       margin-bottom: 10px;
