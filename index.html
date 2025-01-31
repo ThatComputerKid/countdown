@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <script>
+<script>
     // Events data
     const events = [
       { title: "Costa Rica", date: "2025-02-22T00:00:00" },
@@ -41,56 +41,51 @@
     function renderCountdowns() {
       const now = new Date();
 
-    // Filter out past events
-        const upcomingEvents = events
-            .map(event => ({
-                ...event,
-                timeLeft: calculateTimeLeft(event.date)
-            }))
-            .filter(event => event.timeLeft > 0) // Exclude past events
-            .sort((a, b) => a.timeLeft - b.timeLeft);
+      // Sort events by proximity to the current time
+      const sortedEvents = events
+        .map(event => ({
+          ...event,
+          timeLeft: calculateTimeLeft(event.date)
+        }))
+        .sort((a, b) => a.timeLeft - b.timeLeft);
 
-        // If no upcoming events, clear the container
-        countdownsContainer.innerHTML = '';
-        if (upcomingEvents.length === 0) {
-            countdownsContainer.innerHTML = '<p>No upcoming events.</p>';
-            return;
-        }
-      
       // Determine min and max time left for scaling
       const minTime = Math.min(...sortedEvents.map(event => event.timeLeft));
       const maxTime = Math.max(...sortedEvents.map(event => event.timeLeft));
-        // Render the events
-        upcomingEvents.forEach(event => {
-            const eventElement = document.createElement('div');
-            eventElement.classList.add('event');
 
-            const title = document.createElement('div');
-            title.classList.add('event-title');
-            title.textContent = event.title;
+      // Render the events
+      countdownsContainer.innerHTML = '';
+      sortedEvents.forEach(event => {
+        const eventElement = document.createElement('div');
+        eventElement.classList.add('event');
 
-            const timeLeft = event.timeLeft;
-            const timer = document.createElement('div');
-            timer.classList.add('event-timer');
-            timer.textContent = formatTimeLeft(timeLeft);
+        const title = document.createElement('div');
+        title.classList.add('event-title');
+        title.textContent = event.title;
 
-            // Scale the font size based on relative time left
-            const relativeSize = getRelativeSize(timeLeft, minTime, maxTime);
-            eventElement.style.fontSize = `${relativeSize}rem`;
+        const timeLeft = event.timeLeft;
+        const timer = document.createElement('div');
+        timer.classList.add('event-timer');
+        timer.textContent = formatTimeLeft(timeLeft);
 
-            eventElement.appendChild(title);
-            eventElement.appendChild(timer);
-            countdownsContainer.appendChild(eventElement);
-        });
+        // Scale the font size based on relative time left
+        const relativeSize = getRelativeSize(timeLeft, minTime, maxTime);
+        eventElement.style.fontSize = ${relativeSize}rem;
+
+        eventElement.appendChild(title);
+        eventElement.appendChild(timer);
+        countdownsContainer.appendChild(eventElement);
+      });
     }
 
     // Format time left into a readable string
     function formatTimeLeft(ms) {
-        const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((ms / (1000 * 60)) % 60);
-        const seconds = Math.floor((ms / 1000) % 60);
-        return `${days} days and ${hours}:${minutes}:${seconds}`;
+      if (ms <= 0) return "Event has passed!";
+      const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((ms / (1000 * 60)) % 60);
+      const seconds = Math.floor((ms / 1000) % 60);
+      return ${days} days and ${hours}:${minutes}:${seconds};
     }
 
     // Update countdowns every second
