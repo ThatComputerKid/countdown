@@ -1,98 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdowns</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><text x='2' y='30' font-size='28'>🕒</text></svg>">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upcoming Events</title>
+  <!-- Modern font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      padding-bottom: 2rem;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      padding: 2rem 1rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Container for countdown cards */
+    #countdown-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 1rem;
+    }
+
+    /* Card styles using glassmorphism */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 1.5rem;
+      width: 280px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.5);
+    }
+
+    /* Event Title */
+    .event-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 600;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Countdown timer */
+    .time-remaining {
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      transition: font-size 0.3s ease;
+      color: #00f2fe;
+      font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .card {
+        width: 90%;
+      }
+      header h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">Countdowns</div>
-    <div id="countdowns">
-      <!-- Countdown elements will be dynamically rendered -->
-    </div>
-  </div>
+  <header>
+    <h1>Upcoming Events</h1>
+  </header>
+  <div id="countdown-container"></div>
 
   <script>
-    // Events data
+    // ===============================
+    // Hardcoded events
+    // ===============================
     const events = [
-      { title: "Costa Rica", date: "2025-02-22T00:00:00" },
-      { title: "Swim State", date: "2025-02-01T00:00:00" },
-      { title: "Jekyll", date: "2025-03-05T00:00:00" }
+      { name: "Team Meeting", date: new Date("2025-02-05T09:00:00") },
+      { name: "Project Deadline", date: new Date("2025-02-10T17:00:00") },
+      { name: "Conference", date: new Date("2025-03-20T10:00:00") },
+      { name: "New Year Celebration", date: new Date("2026-01-01T00:00:00") }
     ];
 
-    const countdownsContainer = document.getElementById('countdowns');
+    const container = document.getElementById("countdown-container");
 
-    // Calculate the relative time scale for dynamic sizing
-    function calculateTimeLeft(eventDate) {
-      const now = new Date();
-      const target = new Date(eventDate);
-      return Math.max(0, target - now);
+    // ===============================
+    // Helper functions
+    // ===============================
+    // Formats milliseconds into days, hours, minutes, seconds.
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60) % 60;
+      const hours = Math.floor(totalSeconds / 3600) % 24;
+      const days = Math.floor(totalSeconds / 86400);
+      return { days, hours, minutes, seconds };
     }
 
-    function getRelativeSize(timeLeft, minTime, maxTime) {
-      if (minTime === maxTime) return 1; // Avoid division by zero when all events have the same time left
-      return 1 + 1.5 * ((maxTime - timeLeft) / (maxTime - minTime));
+    // Returns a formatted string from a time object.
+    function countdownString({ days, hours, minutes, seconds }) {
+      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
-    // Render sorted and dynamically sized countdowns
-    function renderCountdowns() {
+    // ===============================
+    // Main update function
+    // ===============================
+    function updateCountdowns() {
       const now = new Date();
+      // Filter out past events.
+      const upcoming = events.filter(event => event.date > now);
 
-      // Sort events by proximity to the current time
-      const sortedEvents = events
-        .map(event => ({
-          ...event,
-          timeLeft: calculateTimeLeft(event.date)
-        }))
-        .sort((a, b) => a.timeLeft - b.timeLeft);
+      if (upcoming.length === 0) {
+        container.innerHTML = '<div style="width:100%; text-align:center; font-size: 1.5rem;">No upcoming events.</div>';
+        return;
+      }
 
-      // Determine min and max time left for scaling
-      const minTime = Math.min(...sortedEvents.map(event => event.timeLeft));
-      const maxTime = Math.max(...sortedEvents.map(event => event.timeLeft));
+      // Sort events from soonest to farthest.
+      upcoming.sort((a, b) => a.date - b.date);
 
-      // Render the events
-      countdownsContainer.innerHTML = '';
-      sortedEvents.forEach(event => {
-        const eventElement = document.createElement('div');
-        eventElement.classList.add('event');
+      // Maximum remaining time for scaling font sizes.
+      let maxRemaining = Math.max(...upcoming.map(event => event.date - now));
 
-        const title = document.createElement('div');
-        title.classList.add('event-title');
-        title.textContent = event.title;
+      container.innerHTML = "";
 
-        const timeLeft = event.timeLeft;
-        const timer = document.createElement('div');
-        timer.classList.add('event-timer');
-        timer.textContent = formatTimeLeft(timeLeft);
+      // Define min and max font sizes (in rem) for the countdown text.
+      const minFontSize = 1.2;
+      const maxFontSize = 2.5;
 
-        // Scale the font size based on relative time left
-        const relativeSize = getRelativeSize(timeLeft, minTime, maxTime);
-        eventElement.style.fontSize = `${relativeSize}rem`;
+      upcoming.forEach(event => {
+        const remaining = event.date - now;
+        if (remaining <= 0) return; // Safety check
 
-        eventElement.appendChild(title);
-        eventElement.appendChild(timer);
-        countdownsContainer.appendChild(eventElement);
+        const timeObj = formatTime(remaining);
+        const timeStr = countdownString(timeObj);
+
+        // Scale font size: the event coming up sooner has larger text.
+        let fontSize = minFontSize;
+        if (maxRemaining > 0) {
+          fontSize = minFontSize + (1 - remaining / maxRemaining) * (maxFontSize - minFontSize);
+        }
+
+        // Create a card element.
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // Event title.
+        const titleEl = document.createElement("div");
+        titleEl.className = "event-title";
+        titleEl.textContent = event.name;
+
+        // Countdown timer.
+        const timeEl = document.createElement("div");
+        timeEl.className = "time-remaining";
+        timeEl.textContent = timeStr;
+        timeEl.style.fontSize = fontSize + "rem";
+
+        card.appendChild(titleEl);
+        card.appendChild(timeEl);
+        container.appendChild(card);
       });
     }
 
-    // Format time left into a readable string
-    function formatTimeLeft(ms) {
-      if (ms <= 0) return "Event has passed!";
-      const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((ms / (1000 * 60)) % 60);
-      const seconds = Math.floor((ms / 1000) % 60);
-      return `${days} days and ${hours}:${minutes}:${seconds}`;
-    }
-
-    // Update countdowns every second
-    setInterval(renderCountdowns, 1000);
-
-    // Initial render
-    renderCountdowns();
+    // ===============================
+    // Start the update loop
+    // ===============================
+    updateCountdowns(); // Initial render
+    setInterval(updateCountdowns, 1000);
   </script>
 </body>
 </html>
