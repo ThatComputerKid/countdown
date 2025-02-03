@@ -3,142 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Professional Event Countdowns</title>
-  <!-- Professional, clean font from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Vintage Event Countdowns</title>
+  <!-- Vintage typewriter style font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
   <style>
-    /* CSS Variables for a consistent, professional color scheme */
-    :root {
-      --bg-color: #141414;
-      --card-bg: #1F1F1F;
-      --accent-color: #0ABAB5;
-      --text-color: #E0E0E0;
-      --border-color: rgba(255, 255, 255, 0.1);
-      --gradient-header: linear-gradient(90deg, #0ABAB5, #3A8DFF);
-    }
-
-    /* Global reset and base styles */
+    /* Global reset and vintage base styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+    html, body {
+      height: 100%;
+    }
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      min-height: 100vh;
+      background-color: #f5e8d0;
+      background-image: linear-gradient(135deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent),
+                        linear-gradient(225deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+      background-size: 40px 40px;
+      font-family: 'Special Elite', cursive;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem;
-      overflow-x: hidden;
+      padding: 20px;
+      color: #5c4033;
     }
 
-    /* Header styles with a refined gradient text effect */
+    /* Header styling with a hand‐drawn feel */
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 20px;
     }
     header h1 {
       font-size: 3rem;
-      font-weight: 600;
-      background: var(--gradient-header);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+    }
+    header p {
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+
+    /* Container for countdown cards in a responsive grid */
+    #countdown-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    /* Vintage-styled countdown cards */
+    .card {
+      background-color: #fffbe8;
+      border: 1px solid #c1a57b;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: rotate(-1deg) scale(1.02);
+    }
+
+    .event-title {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 15px;
+      text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    /* Responsive grid layout for the countdown cards */
-    #countdown-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      width: 100%;
-      max-width: 1200px;
-    }
-
-    /* Countdown card styles – professional, minimalist design */
-    .card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 15px;
-      padding: 1.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    /* Subtle, professional background accent using a radial gradient */
-    .card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(10,186,181,0.15), transparent 70%);
-      transform: rotate(30deg);
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Event title styling */
-    .event-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Countdown timer styling with smooth scaling */
     .time-remaining {
       text-align: center;
-      font-family: monospace;
-      font-weight: 500;
-      color: var(--accent-color);
+      font-family: 'Special Elite', cursive;
       transition: font-size 0.3s ease;
-      position: relative;
-      z-index: 1;
+      color: #a0522d;
     }
 
-    /* Responsive typography adjustments */
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.5rem;
-      }
-      .event-title {
-        font-size: 1.3rem;
-      }
+      header h1 { font-size: 2.5rem; }
+      .event-title { font-size: 1.3rem; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Upcoming Events</h1>
+    <h1>Vintage Countdowns</h1>
+    <p>Relive the nostalgia as time ticks away...</p>
   </header>
   <div id="countdown-container"></div>
 
   <script>
-    // -------------------------------
-    // Hardcoded events
-    // -------------------------------
+    // ----------------------------------
+    // Hardcoded events (vintage inspired)
+    // ----------------------------------
     const events = [
-      { name: "Team Meeting", date: new Date("2025-02-05T09:00:00") },
-      { name: "Project Deadline", date: new Date("2025-02-10T17:00:00") },
-      { name: "Conference", date: new Date("2025-03-20T10:00:00") },
-      { name: "New Year Celebration", date: new Date("2026-01-01T00:00:00") }
+      { name: "Retro Meetup", date: new Date("2025-03-15T14:00:00") },
+      { name: "Vinyl Record Fair", date: new Date("2025-04-10T10:00:00") },
+      { name: "Classic Car Show", date: new Date("2025-05-05T09:00:00") },
+      { name: "Old-School Arcade Night", date: new Date("2025-06-01T20:00:00") }
     ];
 
     const container = document.getElementById("countdown-container");
 
-    // -------------------------------
-    // Helper functions
-    // -------------------------------
-    // Format milliseconds into days, hours, minutes, seconds.
+    // ----------------------------------
+    // Helper function to format time
+    // ----------------------------------
     function formatTime(ms) {
       const totalSeconds = Math.floor(ms / 1000);
       const seconds = totalSeconds % 60;
@@ -148,14 +120,13 @@
       return { days, hours, minutes, seconds };
     }
 
-    // Return a formatted countdown string.
     function countdownString({ days, hours, minutes, seconds }) {
       return `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
-    // -------------------------------
+    // ----------------------------------
     // Main update function
-    // -------------------------------
+    // ----------------------------------
     function updateCountdowns() {
       const now = new Date();
       // Filter out past events.
@@ -166,51 +137,52 @@
         return;
       }
 
-      // Sort events from the one happening soonest to the farthest.
+      // Sort events from soonest to farthest.
       upcomingEvents.sort((a, b) => a.date - b.date);
 
-      // Determine the maximum remaining time for scaling purposes.
-      const maxRemaining = Math.max(...upcomingEvents.map(event => event.date - now));
+      // Determine maximum remaining time for scaling.
+      const maxRemaining = Math.max(...upcomingEvents.map(e => e.date - now));
 
       container.innerHTML = "";
-
-      // Define minimum and maximum font sizes (in rem) for the countdown text.
-      const minFontSize = 1.2;
-      const maxFontSize = 2.5;
+      const minFontSize = 1.2; // in rem
+      const maxFontSize = 3;   // in rem
 
       upcomingEvents.forEach(event => {
         const remaining = event.date - now;
-        if (remaining <= 0) return; // safety check
+        if (remaining <= 0) return;
 
         const timeObj = formatTime(remaining);
         const timeStr = countdownString(timeObj);
 
-        // Scale font size dynamically based on remaining time.
+        // Dynamically scale the font size (more imminent events appear with larger numbers)
         let fontSize = minFontSize;
         if (maxRemaining > 0) {
           fontSize = minFontSize + (1 - remaining / maxRemaining) * (maxFontSize - minFontSize);
         }
 
-        // Create the countdown card.
+        // Create card element
         const card = document.createElement("div");
         card.className = "card";
 
+        // Event title
         const titleEl = document.createElement("div");
         titleEl.className = "event-title";
         titleEl.textContent = event.name;
 
+        // Countdown timer
         const timeEl = document.createElement("div");
         timeEl.className = "time-remaining";
         timeEl.textContent = timeStr;
         timeEl.style.fontSize = fontSize + "rem";
 
+        // Assemble and append to container
         card.appendChild(titleEl);
         card.appendChild(timeEl);
         container.appendChild(card);
       });
     }
 
-    // Initial render and continuous update every second.
+    // Initial render and update every second
     updateCountdowns();
     setInterval(updateCountdowns, 1000);
   </script>
