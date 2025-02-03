@@ -3,99 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upcoming Events</title>
-  <!-- Modern font from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Professional Event Countdowns</title>
+  <!-- Professional, clean font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Global Styles */
+    /* CSS Variables for a consistent, professional color scheme */
+    :root {
+      --bg-color: #141414;
+      --card-bg: #1F1F1F;
+      --accent-color: #0ABAB5;
+      --text-color: #E0E0E0;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --gradient-header: linear-gradient(90deg, #0ABAB5, #3A8DFF);
+    }
+
+    /* Global reset and base styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 2rem;
       overflow-x: hidden;
-      padding-bottom: 2rem;
     }
 
-    /* Header */
+    /* Header styles with a refined gradient text effect */
     header {
-      width: 100%;
-      padding: 2rem 1rem;
       text-align: center;
       margin-bottom: 2rem;
     }
     header h1 {
       font-size: 3rem;
       font-weight: 600;
-      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      background: var(--gradient-header);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Container for countdown cards */
-    #countdown-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      width: 100%;
-      max-width: 1200px;
-      padding: 0 1rem;
-    }
-
-    /* Card styles using glassmorphism */
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 1.5rem;
-      width: 280px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.5);
-    }
-
-    /* Event Title */
-    .event-title {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      font-weight: 600;
-      color: #ffffff;
-      text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    /* Countdown timer */
-    .time-remaining {
-      text-align: center;
-      font-family: 'Courier New', Courier, monospace;
-      transition: font-size 0.3s ease;
-      color: #00f2fe;
-      font-weight: 500;
+    /* Responsive grid layout for the countdown cards */
+    #countdown-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1200px;
     }
 
-    /* Responsive adjustments */
+    /* Countdown card styles – professional, minimalist design */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 15px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* Subtle, professional background accent using a radial gradient */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(10,186,181,0.15), transparent 70%);
+      transform: rotate(30deg);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Event title styling */
+    .event-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Countdown timer styling with smooth scaling */
+    .time-remaining {
+      text-align: center;
+      font-family: monospace;
+      font-weight: 500;
+      color: var(--accent-color);
+      transition: font-size 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Responsive typography adjustments */
     @media (max-width: 600px) {
-      .card {
-        width: 90%;
-      }
       header h1 {
         font-size: 2.5rem;
+      }
+      .event-title {
+        font-size: 1.3rem;
       }
     }
   </style>
@@ -107,9 +123,9 @@
   <div id="countdown-container"></div>
 
   <script>
-    // ===============================
+    // -------------------------------
     // Hardcoded events
-    // ===============================
+    // -------------------------------
     const events = [
       { name: "Team Meeting", date: new Date("2025-02-05T09:00:00") },
       { name: "Project Deadline", date: new Date("2025-02-10T17:00:00") },
@@ -119,10 +135,10 @@
 
     const container = document.getElementById("countdown-container");
 
-    // ===============================
+    // -------------------------------
     // Helper functions
-    // ===============================
-    // Formats milliseconds into days, hours, minutes, seconds.
+    // -------------------------------
+    // Format milliseconds into days, hours, minutes, seconds.
     function formatTime(ms) {
       const totalSeconds = Math.floor(ms / 1000);
       const seconds = totalSeconds % 60;
@@ -132,59 +148,57 @@
       return { days, hours, minutes, seconds };
     }
 
-    // Returns a formatted string from a time object.
+    // Return a formatted countdown string.
     function countdownString({ days, hours, minutes, seconds }) {
       return `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
-    // ===============================
+    // -------------------------------
     // Main update function
-    // ===============================
+    // -------------------------------
     function updateCountdowns() {
       const now = new Date();
       // Filter out past events.
-      const upcoming = events.filter(event => event.date > now);
+      const upcomingEvents = events.filter(event => event.date > now);
 
-      if (upcoming.length === 0) {
+      if (upcomingEvents.length === 0) {
         container.innerHTML = '<div style="width:100%; text-align:center; font-size: 1.5rem;">No upcoming events.</div>';
         return;
       }
 
-      // Sort events from soonest to farthest.
-      upcoming.sort((a, b) => a.date - b.date);
+      // Sort events from the one happening soonest to the farthest.
+      upcomingEvents.sort((a, b) => a.date - b.date);
 
-      // Maximum remaining time for scaling font sizes.
-      let maxRemaining = Math.max(...upcoming.map(event => event.date - now));
+      // Determine the maximum remaining time for scaling purposes.
+      const maxRemaining = Math.max(...upcomingEvents.map(event => event.date - now));
 
       container.innerHTML = "";
 
-      // Define min and max font sizes (in rem) for the countdown text.
+      // Define minimum and maximum font sizes (in rem) for the countdown text.
       const minFontSize = 1.2;
       const maxFontSize = 2.5;
 
-      upcoming.forEach(event => {
+      upcomingEvents.forEach(event => {
         const remaining = event.date - now;
-        if (remaining <= 0) return; // Safety check
+        if (remaining <= 0) return; // safety check
 
         const timeObj = formatTime(remaining);
         const timeStr = countdownString(timeObj);
 
-        // Scale font size: the event coming up sooner has larger text.
+        // Scale font size dynamically based on remaining time.
         let fontSize = minFontSize;
         if (maxRemaining > 0) {
           fontSize = minFontSize + (1 - remaining / maxRemaining) * (maxFontSize - minFontSize);
         }
 
-        // Create a card element.
+        // Create the countdown card.
         const card = document.createElement("div");
         card.className = "card";
 
-        // Event title.
         const titleEl = document.createElement("div");
         titleEl.className = "event-title";
         titleEl.textContent = event.name;
 
-        // Countdown timer.
         const timeEl = document.createElement("div");
         timeEl.className = "time-remaining";
         timeEl.textContent = timeStr;
@@ -196,10 +210,8 @@
       });
     }
 
-    // ===============================
-    // Start the update loop
-    // ===============================
-    updateCountdowns(); // Initial render
+    // Initial render and continuous update every second.
+    updateCountdowns();
     setInterval(updateCountdowns, 1000);
   </script>
 </body>
