@@ -70,7 +70,7 @@ body {
     }
 
     /* On hover, scale the pseudo-element to full size so that its border is visible */
-    .box:hover::after {
+    .event:hover::after {
       transform: scale(1);
     }
 
