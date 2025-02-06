@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Floating Spinning 3D Cube</title>
+  <title>Interactive Floating 3D Cube</title>
   <style>
     /* Basic reset and full-screen centering */
     body {
@@ -23,33 +23,39 @@
       perspective: 800px;
     }
 
-    /* This container is animated to create a floating effect */
+    /* The floating container adds a gentle up-and-down motion */
     .float {
       width: 100%;
       height: 100%;
       animation: float 3s infinite ease-in-out;
     }
 
-    /* The cube container which will be spinning */
+    /* The cube container – note that the CSS spin animation has been removed in favor of JS control */
     .cube {
       width: 100%;
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      animation: spin 5s infinite linear;
+      cursor: grab;
+      /* The automatic rotation is now handled via JavaScript */
     }
 
-    /* Styling for each face of the cube */
+    /* Change the cursor when dragging */
+    .cube:active {
+      cursor: grabbing;
+    }
+
+    /* Each face of the cube */
     .cube div {
       position: absolute;
       width: 200px;
       height: 200px;
-      /* background: rgba(255, 255, 255, 0.2); */
+      background: rgba(255, 255, 255, 0.2);
       border: 2px solid #fff;
       box-sizing: border-box;
     }
 
-    /* Positioning each face in 3D space */
+    /* Position each face in 3D space */
     .cube .front  { transform: translateZ(100px); }
     .cube .back   { transform: rotateY(180deg) translateZ(100px); }
     .cube .right  { transform: rotateY(90deg) translateZ(100px); }
@@ -57,17 +63,7 @@
     .cube .top    { transform: rotateX(90deg) translateZ(100px); }
     .cube .bottom { transform: rotateX(-90deg) translateZ(100px); }
 
-    /* Keyframes for the spinning animation */
-    @keyframes spin {
-      from {
-        transform: rotateX(0deg) rotateY(0deg);
-      }
-      to {
-        transform: rotateX(360deg) rotateY(360deg);
-      }
-    }
-
-    /* Keyframes for the floating (up and down) animation */
+    /* Keyframes for the floating animation */
     @keyframes float {
       0%   { transform: translateY(0); }
       50%  { transform: translateY(-20px); }
@@ -90,13 +86,107 @@
   </div>
 
   <script>
-    // Optional JavaScript: Toggle animation play/pause when clicking on the cube.
+    // Select the cube element
     const cube = document.querySelector('.cube');
-    cube.addEventListener('click', () => {
-      // Check the current animation play state and toggle it.
-      const currentState = getComputedStyle(cube).animationPlayState;
-      cube.style.animationPlayState =
-        currentState === 'running' ? 'paused' : 'running';
+
+    // Variables to track rotation and scaling
+    let autoRotX = 0, autoRotY = 0;     // Base auto-rotation angles (in degrees)
+    let dragOffsetX = 0, dragOffsetY = 0; // Additional rotation due to mouse drag
+    let scale = 1;                      // Scale factor for zooming
+
+    // Variables for drag interaction
+    let isDragging = false;
+    let lastMouseX, lastMouseY;
+
+    // Animation loop using requestAnimationFrame
+    function animate() {
+      // Continuously increment the auto-rotation
+      autoRotX += 0.1;
+      autoRotY += 0.1;
+
+      // Calculate the total rotation by adding any drag-induced offsets
+      const totalRotX = autoRotX + dragOffsetY;
+      const totalRotY = autoRotY + dragOffsetX;
+
+      // Update the cube's transform to include scale and rotations
+      cube.style.transform = `scale(${scale}) rotateX(${totalRotX}deg) rotateY(${totalRotY}deg)`;
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // --- Mouse Events for Drag Interaction ---
+    cube.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      // Calculate how much the mouse has moved
+      const dx = e.clientX - lastMouseX;
+      const dy = e.clientY - lastMouseY;
+      // Adjust sensitivity (multiplying by 0.5)
+      dragOffsetX += dx * 0.5;
+      dragOffsetY += dy * 0.5;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        // Add the drag offsets to the base auto-rotation, then reset drag offsets
+        autoRotX += dragOffsetY;
+        autoRotY += dragOffsetX;
+        dragOffsetX = 0;
+        dragOffsetY = 0;
+      }
+      isDragging = false;
+    });
+
+    // --- Touch Events for Mobile Devices ---
+    cube.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      const touch = e.touches[0];
+      lastMouseX = touch.clientX;
+      lastMouseY = touch.clientY;
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - lastMouseX;
+      const dy = touch.clientY - lastMouseY;
+      dragOffsetX += dx * 0.5;
+      dragOffsetY += dy * 0.5;
+      lastMouseX = touch.clientX;
+      lastMouseY = touch.clientY;
+    });
+
+    document.addEventListener('touchend', () => {
+      if (isDragging) {
+        autoRotX += dragOffsetY;
+        autoRotY += dragOffsetX;
+        dragOffsetX = 0;
+        dragOffsetY = 0;
+      }
+      isDragging = false;
+    });
+
+    // --- Mouse Wheel Event for Zooming ---
+    document.addEventListener('wheel', (e) => {
+      e.preventDefault(); // Prevent page scrolling
+      // Adjust the scale factor; deltaY > 0 means scrolling down (zoom out)
+      scale += e.deltaY * -0.001; 
+      // Clamp the scale between 0.5 and 2 for usability
+      scale = Math.min(Math.max(0.5, scale), 2);
+    }, { passive: false });
+
+    // --- Double-Click to Reset Rotation ---
+    cube.addEventListener('dblclick', () => {
+      autoRotX = 0;
+      autoRotY = 0;
     });
   </script>
 </body>
