@@ -36,42 +36,14 @@ body {
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
       word-wrap: break-word;
       text-align: center;
-      transition: transform 0.3s ease;
       z-index: 0;
     }
 
     /* On hover, move the box upward */
     .event:hover {
       transform: translateY(-5px);
-    }
-
-    /* The pseudo-element will serve as our animated border */
-    .event::after {
-      content: "";
-      position: absolute;
-      /* Position it so that the border sits just outside the box */
-      top: -3px;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      border: 3px solid transparent;
-      /* Use a gradient for the border; adjust the angle and colors as desired */
-      border-image: linear-gradient(45deg, #ADD8E6, #FFC0CB) 1;
-      /* Start scaled down to a “spot” (origin at the top center) */
-      transform: scale(0);
-      transform-origin: top center;
-      /* Animate the scaling (the ease-in-out gives a smooth “drawing” effect) */
-      transition: transform 0.6s ease-in-out;
-      /* Do not interfere with mouse events */
-      pointer-events: none;
-      /* Ensure it appears above the box background */
-      z-index: 1;
-      border-radius: 8px; /* match the box if you like rounded borders */
-    }
-
-    /* On hover, scale the pseudo-element to full size so that its border is visible */
-    .event:hover::after {
-      transform: scale(1);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0,255,255,0.5);
     }
 
     .event-title {
