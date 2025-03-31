@@ -6,6 +6,12 @@
   <title>Countdowns</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><text x='2' y='30' font-size='28'>🕒</text></svg>">
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1e1e1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Countdowns">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><text x='2' y='30' font-size='28'>🕒</text></svg>">
 </head>
 <body>
   <div class="container">
@@ -94,6 +100,11 @@
 
     // Initial render
     renderCountdowns();
+  </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
   </script>
 </body>
 </html>
